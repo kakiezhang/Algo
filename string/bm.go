@@ -11,9 +11,15 @@ import "fmt"
 func main() {
 	// testGenerateBadCharacter()
 	testGenerateGoodSuffix()
+	// testGenGS()
 }
 
-func bm() {
+func bm(a, b string, m, n int) {
+	// bc := generateBadCharacter(b, n)
+	// suffix, prefix := generateGoodSuffix(b, n)
+
+	// for i := m - n; i > 0; i-- {
+	// }
 }
 
 func testGenerateBadCharacter() {
@@ -46,11 +52,11 @@ func testGenerateGoodSuffix() {
 	var suffix []int
 	var prefix []bool
 
-	// b = "abcdeab"
+	b = "abcdeab"
 	b = "abaabxabcx"
-	// b = "bbc"
-	// b = "abcabcabc"
-	// b = "ababa"
+	b = "bbc"
+	b = "abcabcabc"
+	b = "ababa"
 	suffix, prefix = generateGoodSuffix(b, len(b))
 	fmt.Printf("suffix: %v\n", suffix)
 	fmt.Printf("prefix: %v\n", prefix)
@@ -67,17 +73,13 @@ func generateGoodSuffix(b string, n int) ([]int, []bool) {
 	for i := 0; i < n-1; i++ {
 		var j = n - i - 2
 
-		if i > 0 && suffix[i] > -1 {
-			j = suffix[i]
-		}
-
 		for ; j > 0; j-- {
 			if b[n-i-1] == b[j] {
 				break
 			}
 		}
 
-		if b[n-i-1] == b[j] {
+		if b[n-i-1] == b[j] && ((suffix[i] > -1 && i > 0) || (suffix[i] == -1 && i == 0)) {
 			// fmt.Println("ssssss")
 			// fmt.Println(i)
 			// fmt.Println(j)
@@ -85,6 +87,47 @@ func generateGoodSuffix(b string, n int) ([]int, []bool) {
 			if j == 0 {
 				prefix[i+1] = true
 			}
+		}
+	}
+
+	return suffix, prefix
+}
+
+func testGenGS() {
+	var b string
+	var suffix []int
+	var prefix []bool
+
+	// b = "abcdeab"
+	// b = "abaabxabcx"
+	// b = "bbc"
+	b = "abcabcabc"
+	// b = "ababa"
+	suffix, prefix = genGS(b, len(b))
+	fmt.Printf("suffix: %v\n", suffix)
+	fmt.Printf("prefix: %v\n", prefix)
+}
+
+func genGS(b string, n int) ([]int, []bool) {
+	var prefix = make([]bool, n)
+	var suffix = make([]int, n)
+	for i := 0; i < n; i++ {
+		prefix[i] = false
+		suffix[i] = -1
+	}
+
+	for i := 0; i < n-1; i++ {
+		j := i
+		var k int
+
+		for j >= 0 && b[j] == b[n-1-k] {
+			k += 1
+			suffix[k] = j
+			j -= 1
+		}
+
+		if j == -1 {
+			prefix[k] = true
 		}
 	}
 
