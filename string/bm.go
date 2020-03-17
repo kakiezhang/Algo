@@ -6,7 +6,10 @@ bm 算法
 */
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func main() {
 	// testGenerateBadCharacter()
@@ -14,12 +17,56 @@ func main() {
 	// testGenGS()
 }
 
-func bm(a, b string, m, n int) {
-	// bc := generateBadCharacter(b, n)
-	// suffix, prefix := generateGoodSuffix(b, n)
+func bm(a, b string, m, n int) int {
+	// a 是主串，m 是主串长度
+	// b 是模式串，n 是模式串长度
+	bc := generateBadCharacter(b, n)
+	suffix, prefix := generateGoodSuffix(b, n)
 
-	// for i := m - n; i > 0; i-- {
-	// }
+	i := 0
+	for i < m-n {
+
+		num := 0   // 好后缀都长度
+		j := n - 1 // 坏字符在模式串中的位置
+		k := i + n - 1
+		for j >= 0 && b[j] == a[k] {
+			j--
+			k--
+			num++
+		}
+
+		if j < 0 { // 所有都匹配上
+			return i
+		}
+
+		var paceNo int
+
+		if num > 0 && suffix[num] > -1 { // 有后缀子串匹配上
+			paceNo = j - suffix[num] + 1
+		} else {
+			// 没有后缀子串，去找一下后缀当中有没有可匹配的前缀子串
+			x := 0
+			y := i + n - num + 1 // 找到好后缀的后缀子串的在主串中第一个点的下标
+			for x < n && b[x] == a[y] {
+				x++
+				y++
+				if prefix[x-1] {
+					break
+				}
+			}
+
+			if x < n { // 找到了对应的前缀
+				paceNo = y
+			} else { // 没有找到了，直接滑倒最后一位
+				paceNo = n
+			}
+		}
+
+		paceNo = int(math.Max(float64(paceNo), float64(bc[j]+1)))
+		i += paceNo
+	}
+
+	return -1
 }
 
 func testGenerateBadCharacter() {
