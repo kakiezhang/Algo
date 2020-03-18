@@ -40,7 +40,14 @@ func testBm() {
 	// pos = bm(a, b, len(a), len(b))
 	// fmt.Printf("pos: %d\n", pos)
 
-	a = "heaohoabemao"
+	// // test 3rd & not found
+	// a = "heaohoabemao"
+	// b = "mmao"
+	// pos = bm(a, b, len(a), len(b))
+	// fmt.Printf("pos: %d\n", pos)
+
+	// test 3rd
+	a = "heaohoaomaommaobe"
 	b = "mmao"
 	pos = bm(a, b, len(a), len(b))
 	fmt.Printf("pos: %d\n", pos)
@@ -81,10 +88,10 @@ func bm(a, b string, m, n int) int {
 			} else {
 				// 没有后缀子串，去找一下好后缀当中有没有可匹配的前缀子串
 				x := -1
-				y := i + n - num + 1 // 找到好后缀的后缀子串的在主串中第一个点的下标
+				y := j + 1 // 找到好后缀的后缀子串的在主串中第一个点的下标
 
 				fmt.Printf("2nd: first child tail index of GS in main str: %d\n", y)
-				for x < n && b[x+1] == a[y] {
+				for x+1 < n && b[x+1] == a[y] {
 					x++
 					y++
 					if prefix[x] {
