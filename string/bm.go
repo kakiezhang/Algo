@@ -22,8 +22,26 @@ func testBm() {
 	var a, b string
 	var pos int
 
-	a = "addkawmask"
-	b = "aw"
+	// // test 1st
+	// a = "addkaamask"
+	// b = "ama"
+	// pos = bm(a, b, len(a), len(b))
+	// fmt.Printf("pos: %d\n", pos)
+
+	// // test 2nd
+	// a = "aaoahemaoabemao"
+	// b = "aoabemao"
+	// pos = bm(a, b, len(a), len(b))
+	// fmt.Printf("pos: %d\n", pos)
+
+	// // test 2nd
+	// a = "eaohoabemao"
+	// b = "mao"
+	// pos = bm(a, b, len(a), len(b))
+	// fmt.Printf("pos: %d\n", pos)
+
+	a = "heaohoabemao"
+	b = "mmao"
 	pos = bm(a, b, len(a), len(b))
 	fmt.Printf("pos: %d\n", pos)
 }
@@ -33,12 +51,12 @@ func bm(a, b string, m, n int) int {
 	// b 是模式串，n 是模式串长度
 	bc := generateBadCharacter(b, n)
 	fmt.Printf("bc: %v\n", bc)
-	suffix, prefix := generateGoodSuffix(b, n)
+	suffix, prefix := genGS(b, n)
 	fmt.Printf("suffix: %v\n", suffix)
 	fmt.Printf("prefix: %v\n", prefix)
 
 	i := 0
-	for i < m-n {
+	for i <= m-n {
 		num := 0   // 好后缀都长度
 		j := n - 1 // 坏字符在模式串中的位置
 		k := i + n - 1
@@ -54,37 +72,41 @@ func bm(a, b string, m, n int) int {
 
 		var paceNo = -1
 
+		fmt.Printf("num: num[%d]\n", num)
+
 		if num > 0 { // 有好后缀
 			if suffix[num] > -1 { // 有后缀子串匹配上
+				fmt.Printf("1st: match child tail: bc[%d] sf[%d]\n", j, suffix[num])
 				paceNo = j - suffix[num] + 1
 			} else {
 				// 没有后缀子串，去找一下好后缀当中有没有可匹配的前缀子串
-				x := 0
+				x := -1
 				y := i + n - num + 1 // 找到好后缀的后缀子串的在主串中第一个点的下标
 
-				// fmt.Printf("1111111: %d\n", y)
-				for x < n && b[x] == a[y] {
+				fmt.Printf("2nd: first child tail index of GS in main str: %d\n", y)
+				for x < n && b[x+1] == a[y] {
 					x++
 					y++
-					if prefix[x-1] {
+					if prefix[x] {
 						break
 					}
 				}
 
-				if x < n { // 找到了对应的前缀
+				fmt.Printf("2nd: x[%d], y[%d]\n", x, y)
+				if x < n && x > -1 { // 找到了对应的前缀
 					paceNo = y
+				} else {
+					// 没有找到，直接滑倒最后一位
+					fmt.Println("3rd: direct move to next seg")
+					paceNo = n
 				}
 			}
 		}
 
-		if paceNo == -1 {
-			// 没有找到了，直接滑倒最后一位
-			paceNo = n
-		}
-
 		fmt.Printf("paceNo: %v\n", paceNo)
+		fmt.Printf("j-bc[a[i+j]]: %v\n", j-bc[a[i+j]])
 
-		paceNo = int(math.Max(float64(paceNo), float64(bc[j]+1)))
+		paceNo = int(math.Max(float64(paceNo), float64(j-bc[a[i+j]])))
 		i += paceNo
 	}
 
