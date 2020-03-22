@@ -6,37 +6,50 @@ package main
 import "fmt"
 
 func main() {
-	testlayerPrint()
-}
-
-func testlayerPrint() {
 	t := &treeNode{
-		data: 10,
+		data: 100,
 		left: &treeNode{
-			data: 5,
+			data: 50,
 			left: &treeNode{
-				data: 3,
+				data: 30,
 			},
 			right: &treeNode{
-				data: 8,
+				data: 80,
 				left: &treeNode{
-					data: 6,
+					data: 60,
 					right: &treeNode{
-						data: 7,
+						data: 70,
 					},
 				},
 				right: &treeNode{
-					data: 9,
+					data: 90,
 				},
 			},
 		},
 	}
 
+	testlayerPrint(t)
+
+	testFind(t, 80)
+
+	t.insert(80)
+	t.insert(80)
+	testlayerPrint(t)
+
+	testFind(t, 80)
+}
+
+func testlayerPrint(t *treeNode) {
 	layerPrint([]*treeLink{
 		&treeLink{
 			current: t,
 		},
 	}, 0)
+}
+
+func testFind(t *treeNode, x int) {
+	node := t.find(x)
+	fmt.Printf("x[%d] found: %v\n", x, node)
 }
 
 func layerPrint(links []*treeLink, depth int) {
@@ -114,13 +127,13 @@ func (tn *treeNode) find(x int) []*treeNode {
 			break
 		}
 
-		if currentNode.data == x {
-			rs = append(rs, currentNode)
-			break
-		} else if currentNode.data > x {
-			currentNode = currentNode.right
-		} else {
+		if currentNode.data > x {
 			currentNode = currentNode.left
+		} else {
+			if currentNode.data == x {
+				rs = append(rs, currentNode)
+			}
+			currentNode = currentNode.right
 		}
 	}
 
@@ -134,17 +147,19 @@ func (tn *treeNode) insert(x int) {
 	}
 
 	for {
-		if currentNode.data >= x {
+		if currentNode.data <= x {
 			if currentNode.right != nil {
 				currentNode = currentNode.right
 			} else {
 				currentNode.right = newTreeNode(x)
+				break
 			}
 		} else {
 			if currentNode.left != nil {
 				currentNode = currentNode.left
 			} else {
 				currentNode.left = newTreeNode(x)
+				break
 			}
 		}
 	}
