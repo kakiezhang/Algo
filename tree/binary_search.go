@@ -3,7 +3,88 @@
 */
 package main
 
+import "fmt"
+
 func main() {
+	testlayerPrint()
+}
+
+func testlayerPrint() {
+	t := &treeNode{
+		data: 10,
+		left: &treeNode{
+			data: 5,
+			left: &treeNode{
+				data: 3,
+			},
+			right: &treeNode{
+				data: 8,
+				left: &treeNode{
+					data: 6,
+					right: &treeNode{
+						data: 7,
+					},
+				},
+				right: &treeNode{
+					data: 9,
+				},
+			},
+		},
+	}
+
+	layerPrint([]*treeLink{
+		&treeLink{
+			current: t,
+		},
+	}, 0)
+}
+
+func layerPrint(links []*treeLink, depth int) {
+	var nexts []*treeLink
+	var i int
+
+	for {
+		if i == 0 {
+			fmt.Printf("[Depth:%d] ", depth)
+		}
+
+		currentNode := links[i].current
+		parentNode := links[i].parent
+
+		fmt.Printf("[%p->%s:%p][%v] ",
+			parentNode, links[i].side, currentNode, currentNode)
+
+		if currentNode.left != nil {
+			nexts = append(nexts, &treeLink{
+				side:    "L",
+				parent:  currentNode,
+				current: currentNode.left,
+			})
+		}
+		if currentNode.right != nil {
+			nexts = append(nexts, &treeLink{
+				side:    "R",
+				parent:  currentNode,
+				current: currentNode.right,
+			})
+		}
+
+		i += 1
+		if i > len(links)-1 {
+			break
+		}
+	}
+	fmt.Println()
+
+	if len(nexts) > 0 {
+		layerPrint(nexts, depth+1)
+	}
+}
+
+type treeLink struct {
+	side    string
+	parent  *treeNode
+	current *treeNode
 }
 
 type treeNode struct {
@@ -16,6 +97,11 @@ func newTreeNode(x int) *treeNode {
 	return &treeNode{
 		data: x,
 	}
+}
+
+func (tn *treeNode) String() string {
+	return fmt.Sprintf("V:%d,L:%p,R:%p",
+		tn.data, tn.left, tn.right)
 }
 
 func (tn *treeNode) find(x int) []*treeNode {
