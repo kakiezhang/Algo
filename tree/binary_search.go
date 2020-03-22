@@ -37,6 +37,12 @@ func main() {
 	testlayerPrint(t)
 
 	testFind(t, 80)
+
+	currentNode, parentNode := t.findMinNode()
+	fmt.Printf("minCurrent: %v, minParent: %v\n", currentNode, parentNode)
+
+	t.del(80)
+	testlayerPrint(t)
 }
 
 func testlayerPrint(t *treeNode) {
@@ -215,12 +221,14 @@ func (tn *treeNode) del(x int) {
 			break
 		}
 
-		if currentNode.data > x {
+		if currentNode.data < x {
 			parentNode = currentNode
 			currentNode = currentNode.right
-		} else if currentNode.data < x {
+			side = 1
+		} else if currentNode.data > x {
 			parentNode = currentNode
 			currentNode = currentNode.left
+			side = 0
 		} else {
 
 			if currentNode.right == nil && currentNode.left == nil {
@@ -230,39 +238,44 @@ func (tn *treeNode) del(x int) {
 				} else {
 					parentNode.right = nil
 				}
-			} else if currentNode.right != nil {
-				// 右子树存在
+				break // 已经找到叶子了，退出
+			} else if currentNode.right != nil && currentNode.left == nil {
+				// 只有右子树存在
 				if side == 0 {
 					parentNode.left = currentNode.right
 				} else {
 					parentNode.right = currentNode.right
 				}
-			} else if currentNode.left != nil {
-				// 左子树存在
+				currentNode = currentNode.right
+			} else if currentNode.left != nil && currentNode.right == nil {
+				// 只有左子树存在
 				if side == 0 {
 					parentNode.left = currentNode.left
 				} else {
 					parentNode.right = currentNode.left
 				}
+				currentNode = currentNode.left
 			} else {
 				// 左右子树都存在
 				currentRight := currentNode.right
 				currentLeft := currentNode.left
 
-				// 最小的节点没有左子树
+				// 最小的节点没有左子树，但它的右子树可能会存在
 				minNode, minParent := currentNode.right.findMinNode()
 				minRight := minNode.right
+				// fmt.Printf("minCurrent: %v, minParent: %v\n", minNode, minParent)
+				// fmt.Printf("Current: %v, Parent: %v\n", currentNode, parentNode)
 
 				minNode.right = currentRight
 				minNode.left = currentLeft
 
-				currentNode.right = minRight
-				currentNode.left = nil
+				// currentNode.right = minRight
+				// currentNode.left = nil
 
 				if minParent != nil {
-					minParent.left = currentNode
+					minParent.left = minRight
 				} else {
-					minNode.right = currentNode
+					minNode.right = nil
 				}
 
 				if side == 0 {
@@ -270,8 +283,10 @@ func (tn *treeNode) del(x int) {
 				} else {
 					parentNode.right = minNode
 				}
+				currentNode = minNode
 			}
 		}
 	}
+
 	return
 }
