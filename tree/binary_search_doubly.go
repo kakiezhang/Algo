@@ -11,30 +11,24 @@ package main
 import "fmt"
 
 func main() {
-	t := &treeNode{
+	var t = &treeNode{
 		data: 100,
-		left: &treeNode{
-			data: 50,
-			left: &treeNode{
-				data: 30,
-			},
-			right: &treeNode{
-				data: 80,
-				left: &treeNode{
-					data: 60,
-					right: &treeNode{
-						data: 70,
-					},
-				},
-				right: &treeNode{
-					data: 90,
-				},
-			},
-		},
 	}
+	t.insert(50)
+	t.insert(30)
+	t.insert(80)
+	t.insert(60)
+	t.insert(70)
+	t.insert(90)
 
 	layerPrint([]*treeNode{t}, 0)
 
+	rv := t.find(60)
+	fmt.Printf("found 60s: %v\n", rv)
+	if len(rv) > 0 {
+		fmt.Printf("1st of 60s prev: %v\n", rv[0].findPrevNode())
+		fmt.Printf("1st of 60s next: %v\n", rv[0].findNextNode())
+	}
 }
 
 func layerPrint(links []*treeNode, depth int) {
@@ -115,6 +109,29 @@ func (tn *treeNode) insert(x int) {
 			}
 		}
 	}
+}
+
+func (tn *treeNode) find(x int) []*treeNode {
+	var currentNode = tn
+
+	var rs []*treeNode
+
+	for {
+		if currentNode == nil {
+			break
+		}
+
+		if currentNode.data > x {
+			currentNode = currentNode.left
+		} else {
+			if currentNode.data == x {
+				rs = append(rs, currentNode)
+			}
+			currentNode = currentNode.right
+		}
+	}
+
+	return rs
 }
 
 func (tn *treeNode) findMinNode() *treeNode {
