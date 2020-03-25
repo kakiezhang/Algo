@@ -1,5 +1,5 @@
 /**
-二叉搜索树
+二叉搜索树的插入，查找，删除，以及树的高度
 */
 package main
 
@@ -41,7 +41,7 @@ func main() {
 	currentNode, parentNode := t.findMinNode()
 	fmt.Printf("minCurrent: %v, minParent: %v\n", currentNode, parentNode)
 
-	t.del(80)
+	t.del(90)
 	testlayerPrint(t)
 }
 
@@ -204,12 +204,6 @@ func (tn *treeNode) findMaxNode() *treeNode {
 	}
 	return currentNode
 }
-
-// func (tn *treeNode) findPrevNode() *treeNode {
-// }
-
-// func (tn *treeNode) findNextNode() *treeNode {
-// }
 
 func (tn *treeNode) del(x int) {
 	var currentNode = tn
