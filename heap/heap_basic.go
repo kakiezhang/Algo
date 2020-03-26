@@ -7,26 +7,64 @@
 */
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func main() {
 	var h = newHeap(3)
 
-	for _, v := range []int{1, 2, 3, 7, 5, 4, 6} {
+	for _, v := range []int{10, 20, 30, 70, 50, 40, 60, 15} {
 		h.insert(v)
 		fmt.Printf("insert: %v, heap: %+v\n", v, h)
 	}
 
-	for h.cnt > 0 {
+	layerPrint(h)
+
+	for h.cnt > 5 {
 		h.deleteTop()
 		fmt.Printf("deleteTop, heap: %+v\n", h)
 	}
+
+	layerPrint(h)
 }
 
 type heap struct {
 	arr []int
 	cnt int
 	max int
+}
+
+func layerPrint(h *heap) {
+	if h.cnt == 0 {
+		return
+	}
+
+	var i int // 表示深度
+
+	for i = 0; ; i++ {
+		j := int(math.Pow(2, float64(i)))   // 每一层的起始点
+		k := int(math.Pow(2, float64(i+1))) // 每一层下一层的起始点
+
+		if j > h.cnt {
+			break
+		}
+
+		fmt.Printf("[depth: %d]", i)
+
+		for ; j < k; j++ {
+			if j <= h.cnt {
+				fmt.Printf("[%d]", h.arr[j])
+			} else {
+				goto endLoop
+			}
+		}
+
+		fmt.Println()
+	}
+endLoop:
+	fmt.Println()
 }
 
 func newHeap(max int) *heap {
@@ -72,6 +110,8 @@ func (h *heap) heapifyFromBottom() {
 			break
 		}
 
+		// 本身是逐个插入的，每次插入前，堆都已经是稳定态，
+		// 所以只需要比较上下关系
 		if h.arr[pos/2] < h.arr[pos] {
 			h.arr[pos], h.arr[pos/2] = h.arr[pos/2], h.arr[pos]
 			pos = pos / 2
