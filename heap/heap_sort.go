@@ -21,10 +21,11 @@ func main() {
 	var arr = []int{10, 20, 30, 40, 70, 80, 60}
 	// var arr = []int{10, 20, 30, 40}
 	h := newHeap(arr, len(arr))
-	// h.heapifyFromBottom()
-	h.heapifyFromTop()
+	// h.heapifyOne()
+	h.heapifySecond()
 	layerPrint(h)
-	// fmt.Println(arr)
+	h.sort()
+	fmt.Printf("after sort: %v\n", arr)
 }
 
 func layerPrint(h *heap) {
@@ -45,7 +46,7 @@ func layerPrint(h *heap) {
 		fmt.Printf("[depth: %d]", i)
 
 		for ; j < k; j++ {
-			if j <= h.cnt {
+			if j < h.cnt {
 				fmt.Printf("[%d]", h.arr[j])
 			} else {
 				goto endLoop
@@ -72,6 +73,9 @@ func newHeap(arr []int, cnt int) *heap {
 }
 
 func (h *heap) heapifyFromBottom() {
+}
+
+func (h *heap) heapifyOne() {
 	// 第一种的堆化：从前往后遍历数组，从下往上堆化
 	if h.cnt == 1 {
 		return
@@ -103,7 +107,7 @@ func (h *heap) heapifyFromBottom() {
 	}
 }
 
-func (h *heap) heapifyFromTop() {
+func (h *heap) heapifySecond() {
 	// 第二种的堆化：是从倒数第二层的非叶节点开始，
 	// 从后往前遍历数组，从上往下堆化
 	if h.cnt == 1 {
@@ -113,34 +117,7 @@ func (h *heap) heapifyFromTop() {
 	i := (h.cnt - 2) / 2
 
 	for i >= 0 {
-		k := i
-
-		for {
-			j := k*2 + 1
-			if j >= h.cnt {
-				break
-			}
-
-			max := k
-
-			if h.arr[k] < h.arr[j] {
-				max = j
-			}
-
-			if j+1 < h.cnt && h.arr[max] < h.arr[j+1] {
-				max = j + 1
-			}
-
-			// fmt.Println(h.arr)
-
-			if max != k {
-				h.arr[k], h.arr[max] = h.arr[max], h.arr[k]
-				k = max
-			} else {
-				break
-			}
-		}
-
+		h.heapifyFromTop(i, h.cnt)
 		i -= 1
 	}
 }
@@ -157,4 +134,45 @@ func (h *heap) heapifyFromTop() {
 // 3 2 0
 
 func (h *heap) sort() {
+	if h.cnt == 1 {
+		return
+	}
+
+	i := h.cnt - 1
+
+	for i > 0 {
+		h.arr[0], h.arr[i] = h.arr[i], h.arr[0]
+		h.heapifyFromTop(0, i)
+		i -= 1
+	}
+}
+
+func (h *heap) heapifyFromTop(k, cnt int) {
+	// TODO 统计有序度
+	for {
+		j := k*2 + 1
+		if j >= cnt {
+			break
+		}
+
+		max := k
+
+		if h.arr[k] < h.arr[j] {
+			max = j
+		}
+
+		if j+1 < cnt && h.arr[max] < h.arr[j+1] {
+			max = j + 1
+		}
+
+		// fmt.Printf("max: %d, j: %d, cnt: %d, arr: %v\n", max, j, cnt, h.arr)
+
+		if max != k {
+			h.arr[k], h.arr[max] = h.arr[max], h.arr[k]
+			k = max
+			// fmt.Println(h.arr)
+		} else {
+			break
+		}
+	}
 }
