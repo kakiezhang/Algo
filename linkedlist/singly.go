@@ -1,6 +1,7 @@
 /**
 单链表
-增删查，反转，求中间节点
+1. 增删查
+2. 反转，求中间节点(原地)
 */
 package linkedlist
 
@@ -16,7 +17,7 @@ type sNode struct {
 }
 
 func (sn *sNode) String() string {
-	return fmt.Sprintf("[%v %p]", sn.data, sn.next)
+	return fmt.Sprintf("[%p][%v %p]", sn, sn.data, sn.next)
 }
 
 func NewSinglyLinkedList() *singlyLinkedList {
@@ -64,7 +65,30 @@ func (sll *singlyLinkedList) Delete() {
 func (sll *singlyLinkedList) Find() {
 }
 
-func (sll *singlyLinkedList) Reverse() {
+func (sll *singlyLinkedList) reverse() {
+	if sll.head == nil {
+		return
+	}
+
+	p := sll.head.next
+	var t *sNode // 反转后的尾节点
+
+	for {
+		if p == nil {
+			break
+		}
+
+		n := p.next // 当前的next先保存起来
+		p.next = t  // 把当前的next赋值为t
+		t = p       // t更新成当前节点
+
+		if n == nil {
+			break
+		}
+		p = n // 移到原来的后面那个节点
+	}
+
+	sll.head.next = p
 }
 
 func (sll *singlyLinkedList) findMid() *sNode {
