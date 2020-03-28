@@ -1,5 +1,8 @@
 /**
-优先级队列（以小顶堆为例）&合并K个有序数组
+优先级队列（以小顶堆为例）
+两个应用：
+1. 合并K个有序数组（从小到大）
+2. 求一个动态数组的最大TopK
 元素从数组的第1位开始存储
 push: 往队列中插入一个数据
 pop: 从队列中取出最小的
@@ -13,7 +16,8 @@ import (
 
 func main() {
 	// testPriorityQueue()
-	testMergeKSorts()
+	// testMergeKSorts()
+	testGetDynamicMaxTopK()
 }
 
 func testMergeKSorts() {
@@ -94,6 +98,34 @@ func mergeKnumSorts(arr [][]int, eleMaxCnt []int,
 	}
 
 	return mergedRes
+}
+
+func testGetDynamicMaxTopK() {
+	var arr []int
+	// arr = []int{71}
+	arr = []int{71, 89, 16, 18, 30, 56, 34, 54, 45, 66, 56}
+	printDynamicMaxTopK(arr, 6)
+}
+
+func printDynamicMaxTopK(arr []int, k int) {
+	if k == 0 {
+		panic("k cannot be zero")
+	}
+
+	h := newHeap(k)
+	for _, v := range arr {
+		if h.cnt < k {
+			h.push(newHeapNode(v, nil))
+		} else {
+			if v > h.arr[1].key {
+				h.arr[1] = newHeapNode(v, nil)
+				h.heapifyFromTop(1, h.cnt)
+			}
+		}
+	}
+
+	fmt.Print("TopK: \n")
+	layerPrint(h)
 }
 
 func testPriorityQueue() {
