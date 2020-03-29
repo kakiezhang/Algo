@@ -16,7 +16,7 @@ func TestDoublyInsert(t *testing.T) {
 }
 
 func TestDoublyFindNode(t *testing.T) {
-	var dll *doublyLinkedList
+	var dll *DoublyLinkedList
 	dll = NewDoublyLinkedList()
 
 	fmt.Printf("find 3? node: %v\n", dll.FindNode(3))
@@ -32,8 +32,7 @@ func TestDoublyFindNode(t *testing.T) {
 }
 
 func TestDoublyDelete(t *testing.T) {
-	var dll *doublyLinkedList
-	dll = NewDoublyLinkedList()
+	dll := NewDoublyLinkedList()
 
 	dll.Delete(3)
 	fmt.Println("delete 3: ")

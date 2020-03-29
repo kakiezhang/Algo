@@ -27,7 +27,7 @@ func TestSinglyFindMid(t *testing.T) {
 }
 
 func TestSinglyReverse(t *testing.T) {
-	var sll *singlyLinkedList
+	var sll *SinglyLinkedList
 	sll = NewSinglyLinkedList()
 	for _, v := range []int{18, 3, 7, 91, 74} {
 		sll.Insert(v)

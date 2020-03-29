@@ -7,7 +7,7 @@ package linkedlist
 
 import "fmt"
 
-type singlyLinkedList struct {
+type SinglyLinkedList struct {
 	head *sNode
 }
 
@@ -20,8 +20,8 @@ func (sn *sNode) String() string {
 	return fmt.Sprintf("[%v %p][%p]", sn.data, sn, sn.next)
 }
 
-func NewSinglyLinkedList() *singlyLinkedList {
-	return &singlyLinkedList{
+func NewSinglyLinkedList() *SinglyLinkedList {
+	return &SinglyLinkedList{
 		head: newSinglyNode(nil), // sentinel
 	}
 }
@@ -32,7 +32,7 @@ func newSinglyNode(v interface{}) *sNode {
 	}
 }
 
-func (sll *singlyLinkedList) Print() {
+func (sll *SinglyLinkedList) Print() {
 	if sll.head == nil {
 		return
 	}
@@ -49,17 +49,17 @@ func (sll *singlyLinkedList) Print() {
 	fmt.Println()
 }
 
-func (sll *singlyLinkedList) Insert(v interface{}) {
+func (sll *SinglyLinkedList) Insert(v interface{}) {
 	node := newSinglyNode(v)
 	sll.InsertNode(node)
 }
 
-func (sll *singlyLinkedList) InsertNode(node *sNode) {
+func (sll *SinglyLinkedList) InsertNode(node *sNode) {
 	node.next = sll.head.next
 	sll.head.next = node
 }
 
-func (sll *singlyLinkedList) Delete(v interface{}) {
+func (sll *SinglyLinkedList) Delete(v interface{}) {
 	node, prev := sll.FindNode(v)
 	if prev == nil {
 		return
@@ -67,7 +67,7 @@ func (sll *singlyLinkedList) Delete(v interface{}) {
 	prev.next = node.next
 }
 
-func (sll *singlyLinkedList) FindNode(v interface{}) (*sNode, *sNode) {
+func (sll *SinglyLinkedList) FindNode(v interface{}) (*sNode, *sNode) {
 	p := sll.head
 	if p == nil {
 		return nil, nil
@@ -85,7 +85,7 @@ func (sll *singlyLinkedList) FindNode(v interface{}) (*sNode, *sNode) {
 	}
 }
 
-func (sll *singlyLinkedList) reverse() {
+func (sll *SinglyLinkedList) reverse() {
 	if sll.head == nil {
 		return
 	}
@@ -111,7 +111,7 @@ func (sll *singlyLinkedList) reverse() {
 	sll.head.next = p
 }
 
-func (sll *singlyLinkedList) findMid() *sNode {
+func (sll *SinglyLinkedList) findMid() *sNode {
 	// 利用快慢指针
 	// 快指针每次走两步，慢指针走一步
 	// 快指针到结尾的时候，慢指针就在中点

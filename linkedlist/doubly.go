@@ -6,7 +6,7 @@ package linkedlist
 
 import "fmt"
 
-type doublyLinkedList struct {
+type DoublyLinkedList struct {
 	head *dNode
 }
 
@@ -16,12 +16,31 @@ type dNode struct {
 	next *dNode
 }
 
+type DirectDNodeData func(interface{}) interface{}
+
+func (dll *DoublyLinkedList) String() string {
+	if dll.head == nil {
+		return ""
+	}
+
+	rs := fmt.Sprintf("[%p]: ", dll)
+	p := dll.head
+	for {
+		rs += fmt.Sprintf("%v->", p)
+		p = p.next
+		if p == nil {
+			break
+		}
+	}
+	return rs
+}
+
 func (dn *dNode) String() string {
 	return fmt.Sprintf("[%p][%v %p][%p]", dn.prev, dn.data, dn, dn.next)
 }
 
-func NewDoublyLinkedList() *doublyLinkedList {
-	return &doublyLinkedList{
+func NewDoublyLinkedList() *DoublyLinkedList {
+	return &DoublyLinkedList{
 		head: newDoublyNode(nil), // sentinel
 	}
 }
@@ -32,7 +51,7 @@ func newDoublyNode(v interface{}) *dNode {
 	}
 }
 
-func (dll *doublyLinkedList) Print() {
+func (dll *DoublyLinkedList) Print() {
 	if dll.head == nil {
 		return
 	}
@@ -49,12 +68,12 @@ func (dll *doublyLinkedList) Print() {
 	fmt.Println()
 }
 
-func (dll *doublyLinkedList) Insert(v interface{}) {
+func (dll *DoublyLinkedList) Insert(v interface{}) {
 	node := newDoublyNode(v)
 	dll.InsertNode(node)
 }
 
-func (dll *doublyLinkedList) InsertNode(node *dNode) {
+func (dll *DoublyLinkedList) InsertNode(node *dNode) {
 	node.next = dll.head.next
 	if node.next != nil {
 		node.next.prev = node
@@ -63,12 +82,12 @@ func (dll *doublyLinkedList) InsertNode(node *dNode) {
 	dll.head.next = node
 }
 
-func (dll *doublyLinkedList) Delete(v interface{}) {
-	node := dll.FindNode(v)
+func (dll *DoublyLinkedList) Delete(v interface{}) {
+	node := dll.FindNode(v, nil)
 	dll.DeleteNode(node)
 }
 
-func (dll *doublyLinkedList) DeleteNode(node *dNode) {
+func (dll *DoublyLinkedList) DeleteNode(node *dNode) {
 	if node == nil {
 		return
 	}
@@ -79,7 +98,8 @@ func (dll *doublyLinkedList) DeleteNode(node *dNode) {
 	node.prev.next = node.next
 }
 
-func (dll *doublyLinkedList) FindNode(v interface{}) *dNode {
+func (dll *DoublyLinkedList) FindNode(
+	v interface{}, f DirectDNodeData) *dNode {
 	if dll.head == nil {
 		return nil
 	}
@@ -90,7 +110,13 @@ func (dll *doublyLinkedList) FindNode(v interface{}) *dNode {
 		if p == nil {
 			break
 		}
-		if p.data == v {
+
+		pv := p.data
+		if f != nil {
+			pv = f(p.data)
+		}
+
+		if pv == v {
 			break
 		}
 		p = p.next
