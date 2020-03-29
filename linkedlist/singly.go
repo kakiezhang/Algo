@@ -17,7 +17,7 @@ type sNode struct {
 }
 
 func (sn *sNode) String() string {
-	return fmt.Sprintf("[%p][%v %p]", sn, sn.data, sn.next)
+	return fmt.Sprintf("[%v %p][%p]", sn.data, sn, sn.next)
 }
 
 func NewSinglyLinkedList() *singlyLinkedList {
