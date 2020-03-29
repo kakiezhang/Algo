@@ -1,5 +1,6 @@
 /**
 双链表
+增删查
 */
 package linkedlist
 
@@ -50,10 +51,10 @@ func (dll *doublyLinkedList) Print() {
 
 func (dll *doublyLinkedList) Insert(v interface{}) {
 	node := newDoublyNode(v)
-	dll.insertNode(node)
+	dll.InsertNode(node)
 }
 
-func (dll *doublyLinkedList) insertNode(node *dNode) {
+func (dll *doublyLinkedList) InsertNode(node *dNode) {
 	node.next = dll.head.next
 	if node.next != nil {
 		node.next.prev = node
@@ -63,7 +64,11 @@ func (dll *doublyLinkedList) insertNode(node *dNode) {
 }
 
 func (dll *doublyLinkedList) Delete(v interface{}) {
-	node := dll.findNode(v)
+	node := dll.FindNode(v)
+	dll.DeleteNode(node)
+}
+
+func (dll *doublyLinkedList) DeleteNode(node *dNode) {
 	if node == nil {
 		return
 	}
@@ -74,7 +79,7 @@ func (dll *doublyLinkedList) Delete(v interface{}) {
 	node.prev.next = node.next
 }
 
-func (dll *doublyLinkedList) findNode(v interface{}) *dNode {
+func (dll *doublyLinkedList) FindNode(v interface{}) *dNode {
 	if dll.head == nil {
 		return nil
 	}

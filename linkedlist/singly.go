@@ -51,24 +51,23 @@ func (sll *singlyLinkedList) Print() {
 
 func (sll *singlyLinkedList) Insert(v interface{}) {
 	node := newSinglyNode(v)
-	sll.insertNode(node)
+	sll.InsertNode(node)
 }
 
-func (sll *singlyLinkedList) insertNode(node *sNode) {
+func (sll *singlyLinkedList) InsertNode(node *sNode) {
 	node.next = sll.head.next
 	sll.head.next = node
 }
 
 func (sll *singlyLinkedList) Delete(v interface{}) {
-	node, parent := sll.findNode(v)
-	if parent == nil {
+	node, prev := sll.FindNode(v)
+	if prev == nil {
 		return
 	}
-
-	parent.next = node.next
+	prev.next = node.next
 }
 
-func (sll *singlyLinkedList) findNode(v interface{}) (*sNode, *sNode) {
+func (sll *singlyLinkedList) FindNode(v interface{}) (*sNode, *sNode) {
 	p := sll.head
 	if p == nil {
 		return nil, nil

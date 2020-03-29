@@ -61,8 +61,8 @@ func TestSinglyFindNode(t *testing.T) {
 	sll.Print()
 
 	for _, v := range []int{18, 3, 74, 22} {
-		node, parent := sll.findNode(v)
-		fmt.Printf("find %d? node: %v, parent: %v\n", v, node, parent)
+		node, prev := sll.FindNode(v)
+		fmt.Printf("find %d? node: %v, prev: %v\n", v, node, prev)
 	}
 }
 
