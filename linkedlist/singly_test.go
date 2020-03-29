@@ -52,3 +52,30 @@ func TestSinglyReverse(t *testing.T) {
 	sll.reverse()
 	sll.Print()
 }
+
+func TestSinglyFindNode(t *testing.T) {
+	sll := NewSinglyLinkedList()
+	for _, v := range []int{18, 3, 7, 91, 74} {
+		sll.Insert(v)
+	}
+	sll.Print()
+
+	for _, v := range []int{18, 3, 74, 22} {
+		node, parent := sll.findNode(v)
+		fmt.Printf("find %d? node: %v, parent: %v\n", v, node, parent)
+	}
+}
+
+func TestSinglyDelete(t *testing.T) {
+	sll := NewSinglyLinkedList()
+	for _, v := range []int{18, 3, 7, 91, 74} {
+		sll.Insert(v)
+	}
+	sll.Print()
+
+	for _, v := range []int{3, 18, 74, 22, 91, 7} {
+		sll.Delete(v)
+		fmt.Printf("delete %d? \n", v)
+		sll.Print()
+	}
+}

@@ -59,10 +59,31 @@ func (sll *singlyLinkedList) insertNode(node *sNode) {
 	sll.head.next = node
 }
 
-func (sll *singlyLinkedList) Delete() {
+func (sll *singlyLinkedList) Delete(v interface{}) {
+	node, parent := sll.findNode(v)
+	if parent == nil {
+		return
+	}
+
+	parent.next = node.next
 }
 
-func (sll *singlyLinkedList) Find() {
+func (sll *singlyLinkedList) findNode(v interface{}) (*sNode, *sNode) {
+	p := sll.head
+	if p == nil {
+		return nil, nil
+	}
+
+	for {
+		if p.next == nil {
+			return nil, nil
+		}
+
+		if p.next.data == v {
+			return p.next, p
+		}
+		p = p.next
+	}
 }
 
 func (sll *singlyLinkedList) reverse() {
