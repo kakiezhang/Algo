@@ -19,7 +19,7 @@ func TestDoublyFindNode(t *testing.T) {
 	var dll *DoublyLinkedList
 	dll = NewDoublyLinkedList()
 
-	fmt.Printf("find 3? node: %v\n", dll.FindNode(3))
+	fmt.Printf("find 3? node: %v\n", dll.FindNode(3, nil))
 
 	for _, v := range []int{18, 3, 7, 91, 74} {
 		dll.Insert(v)
@@ -27,7 +27,7 @@ func TestDoublyFindNode(t *testing.T) {
 	dll.Print()
 
 	for _, v := range []int{3, 33, 18, 74} {
-		fmt.Printf("find %d? node: %v\n", v, dll.FindNode(v))
+		fmt.Printf("find %d? node: %v\n", v, dll.FindNode(v, nil))
 	}
 }
 
