@@ -84,6 +84,7 @@ func (dll *DoublyLinkedList) Poll() *DNode {
 }
 
 func (dll *DoublyLinkedList) Insert(v interface{}) {
+	// insert element to the head
 	node := newDoublyNode(v)
 	dll.InsertNode(node)
 }
@@ -95,6 +96,26 @@ func (dll *DoublyLinkedList) InsertNode(node *DNode) {
 	}
 	node.prev = dll.head
 	dll.head.next = node
+}
+
+func (dll *DoublyLinkedList) Append(v interface{}) {
+	// insert element to the tail
+	node := newDoublyNode(v)
+	dll.AppendNode(node)
+}
+
+func (dll *DoublyLinkedList) AppendNode(node *DNode) {
+	p := dll.head
+
+	for {
+		if p.next == nil {
+			node.prev = p
+			p.next = node
+			break
+		}
+
+		p = p.next
+	}
 }
 
 func (dll *DoublyLinkedList) Delete(v interface{}) {

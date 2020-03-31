@@ -5,6 +5,8 @@
 package graph
 
 import (
+	"fmt"
+
 	"github.com/kakiezhang/Algo/linkedlist"
 )
 
@@ -27,7 +29,7 @@ func NewBfs(g *Graph) *BreathFirstSearch {
 func (bfs *BreathFirstSearch) Find(
 	s, t int) {
 	// 找一条s到t的最短路径
-	bfs.queue.Insert(s)
+	bfs.queue.Append(s)
 
 	for {
 		vert := bfs.queue.Poll()
@@ -48,8 +50,10 @@ func (bfs *BreathFirstSearch) Find(
 			if !bfs.visited[m] {
 				bfs.visited[m] = true
 				bfs.road[m] = v
-				bfs.queue.Insert(m)
+				bfs.queue.Append(m)
 			}
+
+			fmt.Println(bfs.queue)
 
 			if m == t {
 				break

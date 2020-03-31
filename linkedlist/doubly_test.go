@@ -15,6 +15,16 @@ func TestDoublyInsert(t *testing.T) {
 	}
 }
 
+func TestDoublyAppend(t *testing.T) {
+	dll := NewDoublyLinkedList()
+	dll.Print()
+	for _, v := range []int{18, 3, 7, 91, 74} {
+		fmt.Printf("append x: %d\n", v)
+		dll.Append(v)
+		dll.Print()
+	}
+}
+
 func TestDoublyFindNode(t *testing.T) {
 	var dll *DoublyLinkedList
 	dll = NewDoublyLinkedList()

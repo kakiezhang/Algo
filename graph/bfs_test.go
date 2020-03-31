@@ -13,16 +13,22 @@ func TestBfs(t *testing.T) {
 	//     7 - 9
 
 	g := NewGraph(9)
-	g.addTwoEdge(2, 1, 1)
-	g.addTwoEdge(2, 4, 1)
-	g.addTwoEdge(1, 3, 1)
-	g.addTwoEdge(1, 5, 1)
-	g.addTwoEdge(3, 6, 1)
-	g.addTwoEdge(4, 5, 1)
-	g.addTwoEdge(5, 6, 1)
-	g.addTwoEdge(5, 7, 1)
-	g.addTwoEdge(6, 9, 1)
-	g.addTwoEdge(7, 9, 1)
+
+	for _, v := range [][2]int{
+		[2]int{2, 1},
+		[2]int{2, 4},
+		[2]int{1, 3},
+		[2]int{1, 5},
+		[2]int{3, 6},
+		[2]int{4, 5},
+		[2]int{5, 6},
+		[2]int{5, 7},
+		[2]int{6, 9},
+		[2]int{7, 9},
+	} {
+		g.addTwoEdge(v[0], v[1], 1)
+	}
+
 	fmt.Println(g)
 
 	bfs := NewBfs(g)
