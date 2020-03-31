@@ -1,6 +1,7 @@
 /**
 邻接表
 单向双向图，有权无权图（交叉4种情况）
+储存顶点的数组内从第1位开始
 */
 package graph
 
@@ -34,8 +35,8 @@ func (v *Vertex) String() string {
 
 func NewGraph(max int) *Graph {
 	return &Graph{
-		arr: make([]*linkedlist.DoublyLinkedList, max),
-		max: max,
+		arr: make([]*linkedlist.DoublyLinkedList, max+1),
+		max: max + 1,
 	}
 }
 
@@ -48,8 +49,11 @@ func newVertex(v, w int) *Vertex {
 
 func (g *Graph) addEdge(s int, v *Vertex) {
 	// 添加一条从s指向v的边
-	if s >= g.max {
-		panic("cannot store more vertex")
+	if s <= 0 {
+		panic("vertex index has to be gt zero")
+	}
+	if s >= g.max+1 {
+		panic("vertex index has to be le max")
 	}
 
 	if g.arr[s] == nil {
