@@ -35,4 +35,8 @@ func TestBfs(t *testing.T) {
 	bfs.Find(2, 7)
 
 	fmt.Println(bfs.road)
+
+	fmt.Print("roads: \n")
+	bfs.Print(2, 7)
+	fmt.Println()
 }

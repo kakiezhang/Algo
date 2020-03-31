@@ -30,6 +30,7 @@ func (bfs *BreathFirstSearch) Find(
 	s, t int) {
 	// 找一条s到t的最短路径
 	bfs.queue.Append(s)
+	bfs.visited[s] = true
 
 	for {
 		vert := bfs.queue.Poll()
@@ -56,8 +57,17 @@ func (bfs *BreathFirstSearch) Find(
 			fmt.Println(bfs.queue)
 
 			if m == t {
-				break
+				goto LoopEnd
 			}
 		}
 	}
+
+LoopEnd:
+}
+
+func (bfs *BreathFirstSearch) Print(s, t int) {
+	if bfs.road[t] != 0 {
+		bfs.Print(s, bfs.road[t])
+	}
+	fmt.Printf("%d ", t)
 }
