@@ -7,7 +7,7 @@ import (
 
 func TestDfs(t *testing.T) {
 	// 2 - 1 - 3
-	// |       |
+	// | \     |
 	// 4   5 - 6
 	// | /   \ |
 	// 8   7 - 9
@@ -15,10 +15,11 @@ func TestDfs(t *testing.T) {
 	g := NewGraph(9)
 
 	for _, v := range [][2]int{
+		[2]int{2, 5},
 		[2]int{2, 1},
 		[2]int{2, 4},
-		[2]int{8, 4},
 		[2]int{8, 5},
+		[2]int{8, 4},
 		[2]int{1, 3},
 		// [2]int{1, 5},
 		[2]int{3, 6},
@@ -37,4 +38,7 @@ func TestDfs(t *testing.T) {
 
 	fmt.Println(dfs.road)
 
+	fmt.Println("roads: ")
+	dfs.Print(2, 7)
+	fmt.Println()
 }
