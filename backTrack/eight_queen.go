@@ -36,32 +36,36 @@ func (eq *EightQueen) PrintArr() {
 	fmt.Println("]")
 }
 
-func (eq *EightQueen) Find() {
-	for i := 0; i < eq.cnt; { // 行i
-		// 逐行分配位置，每次看是否与前面的位置互斥即可
-		var ex bool
-		var j int
-		for ; j < eq.cnt; j++ { // 列j
-			if eq.arr[i][j] == 1 {
-				// 在下一行不匹配的情况下，
-				// 当前行的占位需要重新调整
-				eq.arr[i][j] = 0
-				continue
-			}
-			ex = eq.ExistMutex(j, i)
-			if !ex {
-				break
-			}
+func (eq *EightQueen) Find(i int) {
+	if i == eq.cnt { // 行i
+		return
+	}
+
+	// 逐行分配位置，每次看是否与前面的位置互斥即可
+	var ex bool
+	var j int
+	for ; j < eq.cnt; j++ { // 列j
+		if eq.arr[i][j] == 1 {
+			// 在下一行不匹配的情况下，
+			// 当前行的占位需要重新调整
+			eq.arr[i][j] = 0
+			continue
 		}
+		ex = eq.ExistMutex(j, i)
 		if !ex {
-			// 没有互斥，填位，跳到下一行
-			eq.arr[i][j] = 1
-			i += 1
-		} else {
-			// 存在互斥，回到上一行
-			i -= 1
+			break
 		}
 	}
+	if !ex {
+		// 没有互斥，填位，跳到下一行
+		eq.arr[i][j] = 1
+		i += 1
+	} else {
+		// 存在互斥，回到上一行
+		i -= 1
+	}
+
+	eq.Find(i)
 }
 
 func (eq *EightQueen) ExistMutex(x, y int) bool {

@@ -7,6 +7,6 @@ import (
 func TestEightQueen(t *testing.T) {
 	eq := newEightQueen(8)
 	eq.PrintArr()
-	eq.Find()
+	eq.Find(0)
 	eq.PrintArr()
 }
