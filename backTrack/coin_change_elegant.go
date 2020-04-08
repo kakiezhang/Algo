@@ -13,13 +13,15 @@ import (
 type CoinChangeElegant struct {
 	arr []int // 面值
 	cnt int
+	mem []int // 备忘录(存储每一个可达金额需要用到的最少面值个数)
 }
 
 func NewCoinChangeElegant(
-	arr []int, cnt int) *CoinChangeElegant {
+	arr []int, cnt, amount int) *CoinChangeElegant {
 	return &CoinChangeElegant{
 		arr: arr,
 		cnt: cnt,
+		mem: make([]int, amount+1), // 从第1位开始启用
 	}
 }
 
@@ -27,6 +29,12 @@ func (cce *CoinChangeElegant) getMinNum(amount int) int {
 	if amount == 0 {
 		return 0
 	}
+
+	if cce.mem[amount] > 0 {
+		return cce.mem[amount]
+	}
+
+	// fmt.Printf("bef=> amount: %d\n", amount)
 
 	min := math.MaxInt64
 
@@ -40,5 +48,8 @@ func (cce *CoinChangeElegant) getMinNum(amount int) int {
 		}
 	}
 
+	// fmt.Printf("aft=> amount: %d, num: %d\n", amount, min)
+
+	cce.mem[amount] = min
 	return min
 }
