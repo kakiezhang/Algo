@@ -30,7 +30,7 @@ func (cc *CoinChange) printStates(states [][]bool) {
 	}
 }
 
-func (cc *CoinChange) getMin() [][]bool {
+func (cc *CoinChange) getMin() (int, [][]bool, []int) {
 	var states = make([][]bool, cc.amount+1)
 	for i := 0; i < cc.amount+1; i++ {
 		states[i] = make([]bool, cc.amount+1)
@@ -39,7 +39,8 @@ func (cc *CoinChange) getMin() [][]bool {
 		states[1][cc.arr[i]] = true
 	}
 
-	for i := 2; i < cc.amount+1; i++ {
+	var i int // 硬币累加次数
+	for i = 2; i < cc.amount+1; i++ {
 		for j := 1; j < cc.amount+1; j++ {
 			if !states[i-1][j] {
 				continue
@@ -58,5 +59,35 @@ func (cc *CoinChange) getMin() [][]bool {
 	}
 LoopEnd:
 
-	return states
+	// fmt.Println(i)
+	var coins = make([]int, i)
+	var x int
+
+	if states[i][cc.amount] {
+		var remain = cc.amount
+		var j int
+		for j = i - 1; j > 0; j-- {
+			// fmt.Printf("j: %d, remain: %d \n", j, remain)
+			for k := 0; k < cc.cnt; k++ {
+				if remain == cc.arr[k] && j == 1 {
+					coins[x] = cc.arr[k]
+					remain = remain - cc.arr[k]
+					break
+				}
+
+				if remain > cc.arr[k] && states[j][remain-cc.arr[k]] {
+					coins[x] = cc.arr[k]
+					x += 1
+					remain = remain - cc.arr[k]
+					break
+				}
+			}
+		}
+
+		if states[j+1][remain] && j == 0 {
+			coins[x] = remain
+		}
+	}
+
+	return i, states, coins
 }
