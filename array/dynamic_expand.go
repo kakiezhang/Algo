@@ -3,33 +3,44 @@
 */
 package array
 
-type Array struct {
+type DynamicArray struct {
 	elements []int
 	length   int
 	capacity int
 }
 
-func NewArray(cnt int) *Array {
+func NewDynamicArray(cnt int) *DynamicArray {
 	if cnt <= 0 {
 		panic("array capacity must be gt 0.")
 	}
-	return &Array{
+	return &DynamicArray{
 		elements: make([]int, cnt),
 		length:   0,
 		capacity: cnt,
 	}
 }
 
-func (a *Array) Add(x int) {
-	if a.length+1 > a.capacity {
-		a.capacity = a.capacity << 1
-		tmp := make([]int, a.capacity) // 申请一个 2 倍大的数组
-		for i := 0; i < a.length; i++ {
-			tmp[i] = a.elements[i]
-		}
-		a.elements = tmp
+func (da *DynamicArray) Add(m, x int) {
+	// m：加入的索引位置，x：要加入的值
+	if m > da.length {
+		panic("couldn't add, hollow between elements.")
 	}
 
-	a.elements[a.length] = x
-	a.length += 1
+	if da.length+1 > da.capacity {
+		da.capacity = da.capacity << 1
+		tmp := make([]int, da.capacity) // 申请一个 2 倍大的数组
+		for i := 0; i < da.length; i++ {
+			tmp[i] = da.elements[i]
+		}
+		da.elements = tmp
+	}
+
+	if m < da.length {
+		for i := da.length - 1; i >= m; i-- {
+			da.elements[i+1] = da.elements[i]
+		}
+	}
+
+	da.elements[m] = x
+	da.length += 1
 }
