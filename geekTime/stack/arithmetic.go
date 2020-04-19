@@ -58,21 +58,25 @@ func (fp *FourPronged) Operate() int {
 		}
 
 		if nowOpPrior, ok := opPrior[ele]; ok {
-			lastOp := fp.op.Top()
+			for {
+				lastOp := fp.op.Top()
 
-			if lastOp == nil {
-				fp.op.Push(&FPOperation{
-					name:  ele,
-					prior: nowOpPrior,
-				})
-			} else {
-				if lastOp.(*FPOperation).prior >= nowOpPrior {
-					fp.OneStep()
-				} else {
+				if lastOp == nil {
 					fp.op.Push(&FPOperation{
 						name:  ele,
 						prior: nowOpPrior,
 					})
+					break
+				} else {
+					if lastOp.(*FPOperation).prior >= nowOpPrior {
+						fp.OneStep()
+					} else {
+						fp.op.Push(&FPOperation{
+							name:  ele,
+							prior: nowOpPrior,
+						})
+						break
+					}
 				}
 			}
 		} else {
@@ -98,27 +102,29 @@ func (fp *FourPronged) Operate() int {
 }
 
 func (fp *FourPronged) OneStep() {
+	fmt.Printf("[before] num: %v, op: %v\n", fp.num, fp.op)
 	n1 := fp.num.Pop().(int)
 	n2 := fp.num.Pop().(int)
 	op := fp.op.Pop().(*FPOperation).name
 	n3 := opCal[op](n1, n2)
 	fp.num.Push(n3)
+	fmt.Printf("[after] num: %v, op: %v\n", fp.num, fp.op)
 }
 
 type CalFunc func(x, y int) int
 
 func plus(x, y int) int {
-	return x + y
+	return y + x
 }
 
 func minus(x, y int) int {
-	return x - y
+	return y - x
 }
 
 func multiply(x, y int) int {
-	return x * y
+	return y * x
 }
 
 func divide(x, y int) int {
-	return x / y
+	return y / x
 }
