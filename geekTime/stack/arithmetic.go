@@ -7,7 +7,6 @@
 package stack
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -50,14 +49,16 @@ func NewFourPronged(s string, cnt int) *FourPronged {
 }
 
 func (fp *FourPronged) Operate() int {
-	for i := 0; i < fp.cnt; i++ {
+	for i := 0; i < fp.cnt; {
 		ele := string(fp.s[i])
 
 		if ele == " " {
+			i++
 			continue
 		}
 
 		if nowOpPrior, ok := opPrior[ele]; ok {
+			// 操作符
 			for {
 				lastOp := fp.op.Top()
 
@@ -79,12 +80,22 @@ func (fp *FourPronged) Operate() int {
 					}
 				}
 			}
+			i++
 		} else {
-			if v, err := strconv.Atoi(ele); err == nil {
-				fp.num.Push(v)
-			} else {
-				panic(fmt.Sprintf("unknown type: ele[%v]", ele))
+			// 操作数
+			var data int
+
+			j := i + 1
+			for ; j <= fp.cnt; j++ {
+				if v, err := strconv.Atoi(string(fp.s[i:j])); err == nil {
+					data = v
+				} else {
+					break
+				}
 			}
+
+			fp.num.Push(data)
+			i = j - 1
 		}
 	}
 
@@ -102,13 +113,13 @@ func (fp *FourPronged) Operate() int {
 }
 
 func (fp *FourPronged) OneStep() {
-	fmt.Printf("[before] num: %v, op: %v\n", fp.num, fp.op)
+	// fmt.Printf("[before] num: %v, op: %v\n", fp.num, fp.op)
 	n1 := fp.num.Pop().(int)
 	n2 := fp.num.Pop().(int)
 	op := fp.op.Pop().(*FPOperation).name
 	n3 := opCal[op](n1, n2)
 	fp.num.Push(n3)
-	fmt.Printf("[after] num: %v, op: %v\n", fp.num, fp.op)
+	// fmt.Printf("[after] num: %v, op: %v\n", fp.num, fp.op)
 }
 
 type CalFunc func(x, y int) int
