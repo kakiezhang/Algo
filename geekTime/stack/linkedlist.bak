@@ -1,7 +1,7 @@
 /**
 链表实现链式栈
 */
-package main
+package stack
 
 import "fmt"
 

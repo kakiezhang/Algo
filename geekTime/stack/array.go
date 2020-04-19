@@ -1,66 +1,45 @@
 /**
 数组实现顺序栈
 */
-package main
+package stack
 
-import "fmt"
-
-const MAXNUM = 2
-
-func main() {
-	sa := newStackA(MAXNUM)
-	sa.push(3)
-	fmt.Println(sa)
-	sa.push(4)
-	fmt.Println(sa)
-	// sa.push(5)
-	// fmt.Println(sa)
-
-	var x int
-	x = sa.pop()
-	// x = sa.pop()
-	// x = sa.pop()
-	fmt.Println(x)
-	fmt.Println(sa)
+type ArrayStack struct {
+	ele []interface{}
+	top int // 栈顶位置
+	cnt int // 栈内元素最大数量
 }
 
-func newStackA(num int) *stackA {
-	return &stackA{
-		num:  num,
-		tail: -1,
-		eles: make([]int, num),
+func NewArrayStack(cnt int) *ArrayStack {
+	return &ArrayStack{
+		ele: make([]interface{}, cnt),
+		top: -1,
+		cnt: cnt,
 	}
 }
 
-type stackA struct {
-	num  int
-	tail int
-	eles []int
-}
-
-func (sa *stackA) String() string {
-	var s string
-	for i := 0; i <= sa.tail; i++ {
-		s += fmt.Sprintf("%d,", sa.eles[i])
-	}
-	return s
-}
-
-func (sa *stackA) push(x int) {
-	if sa.tail == sa.num-1 {
-		panic("stack is full")
+func (as *ArrayStack) Push(x interface{}) {
+	if as.top == as.cnt-1 {
+		panic("stack is full.")
 	}
 
-	sa.tail += 1
-	sa.eles[sa.tail] = x
+	as.top += 1
+	as.ele[as.top] = x
 }
 
-func (sa *stackA) pop() int {
-	if sa.tail == -1 {
-		panic("stack is empty")
+func (as *ArrayStack) Pop() interface{} {
+	if as.cnt == 0 {
+		panic("stack is empty.")
 	}
 
-	x := sa.eles[sa.tail]
-	sa.tail -= 1
+	x := as.ele[as.top]
+	as.ele[as.top] = nil
+	as.top -= 1
 	return x
+}
+
+func (as *ArrayStack) Top() interface{} {
+	if as.top < 0 {
+		return nil
+	}
+	return as.ele[as.top]
 }

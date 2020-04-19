@@ -1,7 +1,7 @@
 /**
 顺序栈实现游览器前进，后退功能
 */
-package main
+package stack
 
 import "fmt"
 
