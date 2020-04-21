@@ -29,4 +29,9 @@ func TestSelectionSort(t *testing.T) {
 	t.Logf("before: %v", arr)
 	selectionSort(arr, len(arr))
 	t.Logf("after: %v", arr)
+
+	arr = []int{5, 2, 4, 1, 2, 4, 7, 5, 6}
+	t.Logf("before: %v", arr)
+	selectionSort(arr, len(arr))
+	t.Logf("after: %v", arr)
 }
