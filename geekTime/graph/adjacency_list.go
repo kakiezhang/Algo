@@ -8,7 +8,7 @@ package graph
 import (
 	"fmt"
 
-	"github.com/kakiezhang/Algo/linkedlist"
+	"github.com/kakiezhang/Algo/geekTime/linkedlist"
 )
 
 type Graph struct {
