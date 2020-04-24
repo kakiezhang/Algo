@@ -8,6 +8,7 @@ import "fmt"
 
 type DoublyLinkedList struct {
 	head *DNode
+	cnt  int
 }
 
 type DNode struct {
@@ -46,6 +47,7 @@ func (dn *DNode) GetData() interface{} {
 func NewDoublyLinkedList() *DoublyLinkedList {
 	return &DoublyLinkedList{
 		head: newDoublyNode(nil), // sentinel
+		cnt:  0,
 	}
 }
 
@@ -72,6 +74,10 @@ func (dll *DoublyLinkedList) Print() {
 	fmt.Println()
 }
 
+func (dll *DoublyLinkedList) Size() int {
+	return dll.cnt
+}
+
 func (dll *DoublyLinkedList) Poll() *DNode {
 	// get & pop first
 	if dll.head == nil {
@@ -80,6 +86,7 @@ func (dll *DoublyLinkedList) Poll() *DNode {
 
 	first := dll.head.next
 	dll.DeleteNode(first)
+	dll.cnt--
 	return first
 }
 
@@ -96,6 +103,7 @@ func (dll *DoublyLinkedList) InsertNode(node *DNode) {
 	}
 	node.prev = dll.head
 	dll.head.next = node
+	dll.cnt++
 }
 
 func (dll *DoublyLinkedList) Append(v interface{}) {
@@ -106,16 +114,15 @@ func (dll *DoublyLinkedList) Append(v interface{}) {
 
 func (dll *DoublyLinkedList) AppendNode(node *DNode) {
 	p := dll.head
-
 	for {
 		if p.next == nil {
 			node.prev = p
 			p.next = node
 			break
 		}
-
 		p = p.next
 	}
+	dll.cnt++
 }
 
 func (dll *DoublyLinkedList) Delete(v interface{}) {
@@ -132,6 +139,7 @@ func (dll *DoublyLinkedList) DeleteNode(node *DNode) {
 		node.next.prev = node.prev
 	}
 	node.prev.next = node.next
+	dll.cnt--
 }
 
 func (dll *DoublyLinkedList) FindNode(
