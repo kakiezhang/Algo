@@ -16,6 +16,10 @@ func topoByDfs(g *graph.Graph) {
 	invert_g := graph.NewGraph(g.Max) // 逆邻接表
 
 	for i := 1; i < g.Max; i++ {
+		if g.Vtx[i] == nil {
+			continue
+		}
+
 		for j := 0; j < g.Vtx[i].Size(); j++ {
 			node := g.Vtx[i].Get(j)
 			if node == nil {
@@ -39,6 +43,10 @@ func topoByDfs(g *graph.Graph) {
 
 func printDfs(invert_g *graph.Graph, i int, visited []bool) {
 	invert_l := invert_g.Vtx[i]
+	if invert_l == nil {
+		fmt.Printf("-> %d ", i)
+		return
+	}
 
 	for j := 0; j < invert_l.Size(); j++ {
 		node := invert_l.Get(j)
