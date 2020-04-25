@@ -21,8 +21,8 @@ func NewBfs(g *Graph) *BreathFirstSearch {
 	return &BreathFirstSearch{
 		graph:   g,
 		queue:   linkedlist.NewDoublyLinkedList(),
-		road:    make([]int, g.max),
-		visited: make([]bool, g.max),
+		road:    make([]int, g.Max),
+		visited: make([]bool, g.Max),
 	}
 }
 
@@ -41,7 +41,7 @@ func (bfs *BreathFirstSearch) Find(
 		v := vert.GetData().(int)
 
 		for {
-			next := bfs.graph.arr[v].Poll() // 相邻的下一个顶点
+			next := bfs.graph.Vtx[v].Poll() // 相邻的下一个顶点
 			if next == nil {
 				break
 			}

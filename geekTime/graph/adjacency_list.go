@@ -47,7 +47,7 @@ func newVertex(v, w int) *Vertex {
 	}
 }
 
-func (g *Graph) addEdge(s int, v *Vertex) {
+func (g *Graph) AddEdge(s int, v *Vertex) {
 	// 添加一条从s指向v的边
 	if s <= 0 {
 		panic("vertex index has to be gt zero")
@@ -63,18 +63,18 @@ func (g *Graph) addEdge(s int, v *Vertex) {
 	g.Vtx[s].Insert(v)
 }
 
-func (g *Graph) addOneEdge(s, t, w int) {
+func (g *Graph) AddOneEdge(s, t, w int) {
 	// 添加单向的边，s指向t
-	g.addEdge(s, newVertex(t, w))
+	g.AddEdge(s, newVertex(t, w))
 }
 
-func (g *Graph) addTwoEdge(s, t, w int) {
+func (g *Graph) AddTwoEdge(s, t, w int) {
 	// 添加双向的边，s指向t，t指向s
-	g.addEdge(s, newVertex(t, w))
-	g.addEdge(t, newVertex(s, w))
+	g.AddEdge(s, newVertex(t, w))
+	g.AddEdge(t, newVertex(s, w))
 }
 
-func (g *Graph) findEdge(s int, t interface{}) bool {
+func (g *Graph) FindEdge(s int, t interface{}) bool {
 	// 找s和t之间是否存在一条s指向t边
 	f := func(v interface{}) interface{} {
 		return v.(*Vertex).data

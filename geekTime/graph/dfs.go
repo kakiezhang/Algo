@@ -18,8 +18,8 @@ type DepthFirstSearch struct {
 func NewDFS(g *Graph) *DepthFirstSearch {
 	return &DepthFirstSearch{
 		graph:   g,
-		road:    make([]int, g.max),
-		visited: make([]bool, g.max),
+		road:    make([]int, g.Max),
+		visited: make([]bool, g.Max),
 		found:   false,
 	}
 }
@@ -31,7 +31,7 @@ func (dfs *DepthFirstSearch) Find(
 	}
 
 	for {
-		vertex := dfs.graph.arr[s].Poll() // 相邻的顶点
+		vertex := dfs.graph.Vtx[s].Poll() // 相邻的顶点
 		if vertex == nil {
 			break
 		}
