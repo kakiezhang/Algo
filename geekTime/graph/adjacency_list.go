@@ -12,8 +12,8 @@ import (
 )
 
 type Graph struct {
-	arr []*linkedlist.DoublyLinkedList // 存储顶点的数组
-	max int
+	Vtx []*linkedlist.DoublyLinkedList // 存储顶点的数组
+	Max int
 }
 
 type Vertex struct {
@@ -23,7 +23,7 @@ type Vertex struct {
 
 func (g *Graph) String() string {
 	var rs string
-	for k, v := range g.arr {
+	for k, v := range g.Vtx {
 		rs += fmt.Sprintf("[%d] => %v\n", k, v)
 	}
 	return rs
@@ -35,8 +35,8 @@ func (v *Vertex) String() string {
 
 func NewGraph(max int) *Graph {
 	return &Graph{
-		arr: make([]*linkedlist.DoublyLinkedList, max+1),
-		max: max + 1,
+		Vtx: make([]*linkedlist.DoublyLinkedList, max+1),
+		Max: max + 1,
 	}
 }
 
@@ -52,15 +52,15 @@ func (g *Graph) addEdge(s int, v *Vertex) {
 	if s <= 0 {
 		panic("vertex index has to be gt zero")
 	}
-	if s >= g.max+1 {
+	if s >= g.Max+1 {
 		panic("vertex index has to be le max")
 	}
 
-	if g.arr[s] == nil {
-		g.arr[s] = linkedlist.NewDoublyLinkedList()
+	if g.Vtx[s] == nil {
+		g.Vtx[s] = linkedlist.NewDoublyLinkedList()
 	}
 
-	g.arr[s].Insert(v)
+	g.Vtx[s].Insert(v)
 }
 
 func (g *Graph) addOneEdge(s, t, w int) {
@@ -80,7 +80,7 @@ func (g *Graph) findEdge(s int, t interface{}) bool {
 		return v.(*Vertex).data
 	}
 
-	if g.arr[s].FindNode(t, f) != nil {
+	if g.Vtx[s].FindNode(t, f) != nil {
 		return true
 	} else {
 		return false

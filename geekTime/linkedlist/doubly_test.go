@@ -57,3 +57,18 @@ func TestDoublyDelete(t *testing.T) {
 	fmt.Println("delete 74: ")
 	dll.Print()
 }
+
+func TestDoublyGet(t *testing.T) {
+	dll := NewDoublyLinkedList()
+
+	dll.Print()
+	for _, v := range []int{18, 3, 7, 91, 74} {
+		// fmt.Printf("append x: %d\n", v)
+		dll.Append(v)
+	}
+	dll.Print()
+
+	t.Logf("get(0): %v", dll.Get(0))
+	t.Logf("get(1): %v", dll.Get(1))
+	t.Logf("get(6): %v", dll.Get(6))
+}

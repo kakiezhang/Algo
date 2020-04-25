@@ -78,6 +78,29 @@ func (dll *DoublyLinkedList) Size() int {
 	return dll.cnt
 }
 
+func (dll *DoublyLinkedList) Get(idx int) *DNode {
+	// get by index
+	if dll.head == nil {
+		return nil
+	}
+
+	var j int
+	p := dll.head.next
+
+	for {
+		if j == idx {
+			break
+		}
+		if p == nil {
+			break
+		}
+
+		p = p.next
+		j++
+	}
+	return p
+}
+
 func (dll *DoublyLinkedList) Poll() *DNode {
 	// get & pop first
 	if dll.head == nil {
