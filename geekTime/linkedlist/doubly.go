@@ -109,7 +109,6 @@ func (dll *DoublyLinkedList) Poll() *DNode {
 
 	first := dll.head.next
 	dll.DeleteNode(first)
-	dll.cnt--
 	return first
 }
 

@@ -33,6 +33,10 @@ func (v *Vertex) String() string {
 	return fmt.Sprintf("[v:%v w:%d]", v.data, v.weight)
 }
 
+func (v *Vertex) GetData() interface{} {
+	return v.data
+}
+
 func NewGraph(max int) *Graph {
 	return &Graph{
 		Vtx: make([]*linkedlist.DoublyLinkedList, max+1),
