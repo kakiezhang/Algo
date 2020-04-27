@@ -6,6 +6,11 @@ score 是作为建堆的依据，拼接在 value 内
 */
 package heap
 
+import (
+	"fmt"
+	"math"
+)
+
 type heaper interface {
 	scorer
 	compareOperater
@@ -21,7 +26,7 @@ type compareOperater interface {
 
 func NewSmallTopHeap(max int) *SmallTopHeap {
 	sth := &SmallTopHeap{
-		Heap: NewHeap(max),
+		Heap: newHeap(max),
 	}
 	sth.Heap.opCmpFunc = sth.opCmpFunc
 	return sth
@@ -41,7 +46,7 @@ func (sth *SmallTopHeap) opCmpFunc(c, p *HeapNode) bool {
 
 func NewBigTopHeap(max int) *BigTopHeap {
 	bth := &BigTopHeap{
-		Heap: NewHeap(max),
+		Heap: newHeap(max),
 	}
 	bth.Heap.opCmpFunc = bth.opCmpFunc
 	return bth
@@ -59,7 +64,7 @@ func (bth *BigTopHeap) opCmpFunc(c, p *HeapNode) bool {
 	}
 }
 
-func NewHeap(max int) *Heap {
+func newHeap(max int) *Heap {
 	return &Heap{
 		node: make([]*HeapNode, max+1), // 0idx不占位
 		cnt:  0,
@@ -78,6 +83,39 @@ type Heap struct {
 type opCmpFunc func(*HeapNode, *HeapNode) bool
 type ScoreFunc func(*HeapNode) int
 
+func (h *Heap) String() string {
+	if h.cnt == 0 {
+		return ""
+	}
+
+	var rs string
+	var i int // 表示深度
+
+	for i = 0; ; i++ {
+		j := int(math.Pow(2, float64(i)))   // 每一层的起始点
+		k := int(math.Pow(2, float64(i+1))) // 每一层下一层的起始点
+
+		if j > h.cnt {
+			break
+		}
+
+		rs += fmt.Sprintf("[depth: %d]", i)
+
+		for ; j < k; j++ {
+			if j <= h.cnt {
+				rs += fmt.Sprintf("[%v]", h.node[j])
+			} else {
+				goto endLoop
+			}
+		}
+
+		rs += fmt.Sprintln()
+	}
+endLoop:
+	// rs += fmt.Sprintln()
+	return rs
+}
+
 func NewHeapNode(
 	key string, value interface{}) *HeapNode {
 	return &HeapNode{
@@ -89,6 +127,10 @@ func NewHeapNode(
 type HeapNode struct {
 	Key   string
 	Value interface{}
+}
+
+func (hn *HeapNode) String() string {
+	return fmt.Sprintf("[k:%s v:%+v]", hn.Key, hn.Value)
 }
 
 func (h *Heap) Add(hn *HeapNode) {
@@ -127,27 +169,31 @@ func (h *Heap) Poll() *HeapNode {
 
 		i := 1
 		for {
-			if i >= h.cnt {
+			k := i * 2 // the mini/max idx
+			if k > h.cnt-1 {
 				break
 			}
 
-			k := i * 2 // the mini/max idx
 			m := k + 1
 
 			if !h.opCmpFunc(h.node[k], h.node[i]) {
 				k = i
 			}
 
-			if !h.opCmpFunc(h.node[k], h.node[m]) {
+			if m <= h.cnt-1 && !h.opCmpFunc(h.node[k], h.node[m]) {
 				k = m
 			}
 
 			if k != i {
-				h.node[k], h.node[m] = h.node[m], h.node[k]
+				h.node[k], h.node[i] = h.node[i], h.node[k]
+				i = k
+			} else {
+				break
 			}
 		}
 	}
 
+	h.node[h.cnt] = nil
 	h.cnt--
 
 	return hn
