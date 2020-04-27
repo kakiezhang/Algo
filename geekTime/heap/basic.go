@@ -6,31 +6,64 @@ score 是作为建堆的依据，拼接在 value 内
 */
 package heap
 
+type heaper interface {
+	scorer
+	compareOperater
+}
+
+type scorer interface {
+	ScoreFunc(*HeapNode) int
+}
+
 type compareOperater interface {
-	opCmp(c, p *HeapNode) bool
+	opCmpFunc(*HeapNode, *HeapNode) bool
+}
+
+func NewSmallTopHeap(max int) *SmallTopHeap {
+	sth := &SmallTopHeap{
+		Heap: NewHeap(max),
+	}
+	sth.Heap.opCmpFunc = sth.opCmpFunc
+	return sth
 }
 
 type SmallTopHeap struct {
 	*Heap
 }
 
-func (sth *SmallTopHeap) opCmp(c, p *HeapNode) bool {
-	if c.Score() < p.Score() {
+func (sth *SmallTopHeap) opCmpFunc(c, p *HeapNode) bool {
+	if sth.ScoreFunc(c) < sth.ScoreFunc(p) {
 		return true
 	} else {
 		return false
 	}
 }
 
+func NewBigTopHeap(max int) *BigTopHeap {
+	bth := &BigTopHeap{
+		Heap: NewHeap(max),
+	}
+	bth.Heap.opCmpFunc = bth.opCmpFunc
+	return bth
+}
+
 type BigTopHeap struct {
 	*Heap
 }
 
-func (bth *BigTopHeap) opCmp(c, p *HeapNode) bool {
-	if c.Score() > p.Score() {
+func (bth *BigTopHeap) opCmpFunc(c, p *HeapNode) bool {
+	if bth.ScoreFunc(c) > bth.ScoreFunc(p) {
 		return true
 	} else {
 		return false
+	}
+}
+
+func NewHeap(max int) *Heap {
+	return &Heap{
+		node: make([]*HeapNode, max+1), // 0idx不占位
+		cnt:  0,
+		max:  max,
 	}
 }
 
@@ -38,24 +71,33 @@ type Heap struct {
 	node []*HeapNode
 	cnt  int
 	max  int
+	opCmpFunc
+	ScoreFunc
 }
 
-func (h *Heap) opCmp(c, p *HeapNode) bool
+type opCmpFunc func(*HeapNode, *HeapNode) bool
+type ScoreFunc func(*HeapNode) int
+
+func NewHeapNode(
+	key string, value interface{}) *HeapNode {
+	return &HeapNode{
+		Key:   key,
+		Value: value,
+	}
+}
 
 type HeapNode struct {
-	key   string
-	value interface{}
+	Key   string
+	Value interface{}
 }
-
-func (hn *HeapNode) Score() int
 
 func (h *Heap) Add(hn *HeapNode) {
 	if h.cnt == h.max {
 		panic("reach max, couldn't add more node.")
 	}
 
-	h.node[h.cnt] = hn
 	h.cnt++
+	h.node[h.cnt] = hn
 
 	i := h.cnt
 
@@ -64,7 +106,7 @@ func (h *Heap) Add(hn *HeapNode) {
 			break
 		}
 
-		if h.opCmp(h.node[i], h.node[i/2]) {
+		if h.opCmpFunc(h.node[i], h.node[i/2]) {
 			h.node[i], h.node[i/2] = h.node[i/2], h.node[i]
 			i = i / 2
 		} else {
@@ -92,11 +134,11 @@ func (h *Heap) Poll() *HeapNode {
 			k := i * 2 // the mini/max idx
 			m := k + 1
 
-			if !h.opCmp(h.node[k], h.node[i]) {
+			if !h.opCmpFunc(h.node[k], h.node[i]) {
 				k = i
 			}
 
-			if !h.opCmp(h.node[k], h.node[m]) {
+			if !h.opCmpFunc(h.node[k], h.node[m]) {
 				k = m
 			}
 
