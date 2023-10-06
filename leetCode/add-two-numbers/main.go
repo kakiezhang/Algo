@@ -118,7 +118,7 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 			quit2 = true
 		}
 
-		if quit1 && quit2 {
+		if quit1 && quit2 && x3 == 0 {
 			p.Next = nil
 			break
 		}
