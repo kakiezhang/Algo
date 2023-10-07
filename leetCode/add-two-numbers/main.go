@@ -128,8 +128,7 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 		x3 = total / 10
 
 		node := &ListNode{
-			Val:  total % 10,
-			Next: &ListNode{},
+			Val: total % 10,
 		}
 
 		if i == 0 {
