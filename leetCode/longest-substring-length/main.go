@@ -42,18 +42,27 @@ func main() {
 		s := "dvdf"
 		fmt.Printf("lengthOfLongestSubstring(%s) = %d\n", s, lengthOfLongestSubstring(s))
 	}
+
+	{
+		s := "dvgcvgdf"
+		fmt.Printf("lengthOfLongestSubstring(%s) = %d\n", s, lengthOfLongestSubstring(s))
+	}
 }
 
+// 滑动窗口
 func lengthOfLongestSubstring(s string) int {
 	cnt := len(s)
 	if cnt <= 1 {
 		return cnt
 	}
 
-	m := make(map[byte]int)
+	m := make(map[byte]int) // key: element value: index
 	m[s[0]] = 0
 	rs := len(m)
 
+	// 保持找到的最新窗口的左侧，移动窗口右侧进行比较
+	// 每次找到重复元素时，左侧往右收缩
+	h := 0
 	i := 0
 	j := i + 1
 	for i < len(s)-1 && j < len(s) {
@@ -62,11 +71,11 @@ func lengthOfLongestSubstring(s string) int {
 		if k, ok := m[next]; ok {
 			i = k + 1
 
-			m = make(map[byte]int)
-
-			for a := k; a < j; a++ {
-				m[s[a]] = a
+			for a := h; a <= k; a++ {
+				delete(m, s[a])
 			}
+
+			h = i
 		}
 
 		m[next] = j
@@ -74,7 +83,7 @@ func lengthOfLongestSubstring(s string) int {
 
 		j++
 
-		// fmt.Printf("i: %d, j: %d, rs: %d, m: %+v\n", i, j, rs, m)
+		// fmt.Printf("h: %d, i: %d, j: %d, rs: %d, m: %+v\n", h, i, j, rs, m)
 	}
 	return rs
 }
